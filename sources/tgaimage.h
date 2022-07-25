@@ -1,6 +1,8 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
+// TODO: refactor code with C++17 standart
+
 #include <fstream>
 
 #pragma pack(push,1)
@@ -41,20 +43,21 @@ struct TGAColor {
 	TGAColor(int v, int bpp) : val(v), bytespp(bpp) {
 	}
 
-	TGAColor(const TGAColor &c) : val(c.val), bytespp(c.bytespp) {
+	TGAColor(const TGAColor& c) : val(c.val), bytespp(c.bytespp) {
 	}
 
-	TGAColor(const unsigned char *p, int bpp) : val(0), bytespp(bpp) {
-		for (int i=0; i<bpp; i++) {
+	TGAColor(const unsigned char* p, int bpp) : val(0), bytespp(bpp) {
+		for (int i = 0; i < bpp; i++) {
 			raw[i] = p[i];
 		}
 	}
 
-	TGAColor & operator =(const TGAColor &c) {
+	TGAColor& operator=(const TGAColor& c) {
 		if (this != &c) {
 			bytespp = c.bytespp;
 			val = c.val;
 		}
+
 		return *this;
 	}
 };
@@ -67,29 +70,39 @@ protected:
 	int height;
 	int bytespp;
 
-	bool   load_rle_data(std::ifstream &in);
-	bool unload_rle_data(std::ofstream &out);
+	bool   load_rle_data(std::ifstream& in);
+	bool unload_rle_data(std::ofstream& out);
+
 public:
 	enum Format {
-		GRAYSCALE=1, RGB=3, RGBA=4
+		GRAYSCALE = 1, 
+		RGB = 3, 
+		RGBA = 4
 	};
 
+public:
 	TGAImage();
 	TGAImage(int w, int h, int bpp);
-	TGAImage(const TGAImage &img);
-	bool read_tga_file(const char *filename);
-	bool write_tga_file(const char *filename, bool rle=true);
+	TGAImage(const TGAImage& img);
+
+	~TGAImage();
+
+public:
+	bool read_tga_file(const char* filename);
+	bool write_tga_file(const char* filename, bool rle=true);
 	bool flip_horizontally();
 	bool flip_vertically();
 	bool scale(int w, int h);
+
 	TGAColor get(int x, int y);
 	bool set(int x, int y, TGAColor c);
-	~TGAImage();
-	TGAImage & operator =(const TGAImage &img);
+
+	TGAImage& operator=(const TGAImage& img);
+
 	int get_width();
 	int get_height();
 	int get_bytespp();
-	unsigned char *buffer();
+	unsigned char* buffer();
 	void clear();
 };
 

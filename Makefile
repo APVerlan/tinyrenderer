@@ -1,12 +1,13 @@
 SYSCONF_LINK = g++
-CPPFLAGS     =
+CPPFLAGS     = -std=c++17
 LDFLAGS      =
-LIBS         = -lm
+LIBS         = -lm 
 
 DESTDIR = ./
+SOURCEDIR = ./sources/
 TARGET  = main
 
-OBJECTS := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+OBJECTS := $(patsubst %.cpp,%.o,$(wildcard $(SOURCEDIR)*.cpp) main.cpp)
 
 all: $(DESTDIR)$(TARGET)
 
@@ -19,4 +20,10 @@ $(OBJECTS): %.o: %.cpp
 clean:
 	-rm -f $(OBJECTS)
 	-rm -f $(TARGET)
+
+fclean: clean
 	-rm -f *.tga
+
+re: clean all
+
+.PHONY: fclean re all clean
